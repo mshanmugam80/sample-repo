@@ -120,8 +120,8 @@ echo "dnvm installed."
 dnvm list
 
 #Update apt-get
-apt-get update
-apt-get -y install libunwind8 gettext libssl-dev libcurl3-dev zlib1g
+apt-get $APT_OPTIONS update | indent
+apt-get -y install libunwind8 gettext libssl-dev libcurl3-dev zlib1g -p=$LP_DIR/export
 
 #Upgrade dnvm
 echo "DNVM to install DNX for .NET Core"
