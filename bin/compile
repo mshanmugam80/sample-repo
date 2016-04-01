@@ -67,6 +67,8 @@ echo "DNVM to install DNX for .NET Core"
 dnvm upgrade -runtime coreclr
 dnvm use -runtime coreclr -arch x64 1.0.0-rc1-update2
 dnvm list
+
+apt-get install /app/.
 echo "dnvm upgraded."
 
 for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
@@ -89,6 +91,8 @@ ls $APT_CACHE_DIR/archives/*.deb
 for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
   topic "Installing $(basename $DEB)"
   dpkg -x $DEB $BUILD_DIR/.apt/
+  
+  apt-get install $DEB -path=$BUILD_DIR/.apt/
 done
 
 cp -f $BUILD_DIR/.apt/lib/x86_64-linux-gnu/* /app/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-rc1-update2/bin/
