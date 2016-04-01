@@ -48,11 +48,6 @@ else
 fi
 echo "DNVM FLAGS: ${DNVM_FLAGS}"
 
-# Install DNVM
-touch ~/.profile
-curl -sSL https://raw.githubusercontent.com/aspnet/Home/${DNVM_BRANCH}/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
-dnvm
-
 APT_CACHE_DIR="$CACHE_DIR/apt/cache"
 APT_STATE_DIR="$CACHE_DIR/apt/state"
 
@@ -63,6 +58,10 @@ APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state
 
 topic "Updating apt caches"
 apt-get $APT_OPTIONS update | indent
+
+# Install DNVM
+touch ~/.profile
+curl -sSL https://raw.githubusercontent.com/aspnet/Home/${DNVM_BRANCH}/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
 
 for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
   if [[ $PACKAGE == *deb ]]; then
@@ -113,9 +112,9 @@ mkdir -p ${DNVM_RUNTIME_LOCAL_CACHE}
 mkdir -p ${DNVM_RUNTIME_CACHE_LOCATION}
 ln -s ${DNVM_RUNTIME_CACHE_LOCATION} ${DNVM_RUNTIME_LOCAL_CACHE}/runtimes
 
-echo "dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default"
-dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default
-echo "dnvm installed."
+#echo "dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default"
+#dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default
+#echo "dnvm installed."
 
 #Update apt-get
 #ls /app/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-rc1-update2/bin
@@ -125,6 +124,7 @@ echo "dnvm installed."
 echo "DNVM to install DNX for .NET Core"
 dnvm upgrade -runtime coreclr
 dnvm use -runtime coreclr -arch x64 1.0.0-rc1-update2
+dnvm list
 echo "dnvm upgraded."
 
 echo "dnx --version"
