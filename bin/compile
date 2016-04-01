@@ -121,7 +121,7 @@ dnvm list
 
 #Update apt-get
 apt-get $APT_OPTIONS update | indent
-apt-get -y install libunwind8 gettext libssl-dev libcurl3-dev zlib1g -p=$LP_DIR/export
+apt-get -y install libunwind8 gettext libssl-dev libcurl3-dev zlib1g -path=${PKG_CONFIG_PATH}
 
 #Upgrade dnvm
 echo "DNVM to install DNX for .NET Core"
