@@ -133,6 +133,7 @@ dnvm list
 echo "dnvm upgraded."
 
 echo "dnx --version"
+ls /app/.dnx/runtimes
 /app/.dnx/runtimes/dnx --version
 echo "dnx version shown"
 
