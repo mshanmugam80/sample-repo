@@ -78,6 +78,7 @@ for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
 done
 
 mkdir -p $BUILD_DIR/.apt
+ls $APT_CACHE_DIR/archives/*.deb
 
 for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
   topic "Installing $(basename $DEB)"
@@ -112,6 +113,7 @@ export DNVM_RUNTIME_LOCAL_CACHE="/app/.dnx"
 export DNVM_RUNTIME_CACHE_LOCATION="${CACHE_DIR}/dnx/runtimes"
 mkdir -p ${DNVM_RUNTIME_LOCAL_CACHE}
 mkdir -p ${DNVM_RUNTIME_CACHE_LOCATION}
+echo "ln -s ${DNVM_RUNTIME_CACHE_LOCATION} ${DNVM_RUNTIME_LOCAL_CACHE}/runtimes"
 ln -s ${DNVM_RUNTIME_CACHE_LOCATION} ${DNVM_RUNTIME_LOCAL_CACHE}/runtimes
 
 #echo "dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default"
