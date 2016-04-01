@@ -124,5 +124,8 @@ echo "DNVM to install DNX for .NET Core"
 dnvm upgrade -runtime coreclr
 echo "dnvm upgraded."
 
+source $LP_DIR/
+echo "dnx --version"
 dnx --version
+echo "dnx version shown"
 
