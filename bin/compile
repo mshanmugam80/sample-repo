@@ -63,14 +63,6 @@ apt-get $APT_OPTIONS update | indent
 touch ~/.profile
 curl -sSL https://raw.githubusercontent.com/aspnet/Home/${DNVM_BRANCH}/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
 
-echo "DNVM to install DNX for .NET Core"
-dnvm upgrade -runtime coreclr
-dnvm use -runtime coreclr -arch x64 1.0.0-rc1-update2
-dnvm list
-
-apt-get install /app/.
-echo "dnvm upgraded."
-
 for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
   if [[ $PACKAGE == *deb ]]; then
     PACKAGE_NAME=$(basename $PACKAGE .deb)
@@ -86,16 +78,12 @@ for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
 done
 
 mkdir -p $BUILD_DIR/.apt
-ls $APT_CACHE_DIR/archives/*.deb
 
 for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
   topic "Installing $(basename $DEB)"
   dpkg -x $DEB $BUILD_DIR/.apt/
-  
-  apt-get install $DEB -path=$BUILD_DIR/.apt/
+  ls $BUILD_DIR/.apt/bin/ -h -l
 done
-
-cp -f $BUILD_DIR/.apt/lib/x86_64-linux-gnu/* /app/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-rc1-update2/bin/
 
 topic "Writing profile script"
 mkdir -p $BUILD_DIR/.profile.d
@@ -109,6 +97,9 @@ export CPPPATH="\$INCLUDE_PATH"
 export PKG_CONFIG_PATH="\$HOME/.apt/usr/lib/x86_64-linux-gnu/pkgconfig:\$HOME/.apt/usr/lib/i386-linux-gnu/pkgconfig:\$HOME/.apt/usr/lib/pkgconfig:\$PKG_CONFIG_PATH"
 EOF
 
+echo "Copy profile to build dir"
+cp -n ${LP_DIR}/.profile.d/* ${BUILD_DIR}/.profile.d/
+
 export PATH="$BUILD_DIR/.apt/usr/bin:$PATH"
 export LD_LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:$LD_LIBRARY_PATH"
 export LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:$LIBRARY_PATH"
@@ -117,7 +108,7 @@ export CPATH="$INCLUDE_PATH"
 export CPPPATH="$INCLUDE_PATH"
 export PKG_CONFIG_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/pkgconfig:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu/pkgconfig:$BUILD_DIR/.apt/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-source $BUILD_DIR/.profile.d/000_apt.sh
+echo "Path : $PATH"
 #give environment to later buildpacks
 export | grep -E -e ' (PATH|LD_LIBRARY_PATH|LIBRARY_PATH|INCLUDE_PATH|CPATH|CPPPATH|PKG_CONFIG_PATH)='  > "$LP_DIR/export"
 
@@ -125,9 +116,7 @@ export DNVM_RUNTIME_LOCAL_CACHE="/app/.dnx"
 export DNVM_RUNTIME_CACHE_LOCATION="${CACHE_DIR}/dnx/runtimes"
 mkdir -p ${DNVM_RUNTIME_LOCAL_CACHE}
 mkdir -p ${DNVM_RUNTIME_CACHE_LOCATION}
-echo "ln -s ${DNVM_RUNTIME_CACHE_LOCATION} ${DNVM_RUNTIME_LOCAL_CACHE}/runtimes"
 ln -s ${DNVM_RUNTIME_CACHE_LOCATION} ${DNVM_RUNTIME_LOCAL_CACHE}/runtimes
-
 
 #echo "dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default"
 #dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default
@@ -139,13 +128,12 @@ ln -s ${DNVM_RUNTIME_CACHE_LOCATION} ${DNVM_RUNTIME_LOCAL_CACHE}/runtimes
 
 #Upgrade dnvm
 echo "DNVM to install DNX for .NET Core"
-dnvm upgrade
+dnvm upgrade -runtime coreclr
 dnvm use -runtime coreclr -arch x64 1.0.0-rc1-update2
 dnvm list
 echo "dnvm upgraded."
 
-echo "dnx --version"
-ls /app/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-rc1-update2/bin
-/app/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-rc1-update2/bin/dnx --version
-echo "dnx version shown"
+echo "dnu --version"
+dnu --version
+echo "dnu version shown"
 
