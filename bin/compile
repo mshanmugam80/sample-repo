@@ -29,6 +29,30 @@ function indent() {
   esac
 }
 
+: ${LIBUV_VERSION:="1.8.0"}
+: ${DNVM_BRANCH:="dev"}
+: ${DNX_VERSION:="latest"}
+
+if [ -n "$BUILD_DEBUG" ]; then
+	DNU_FLAGS=""
+	echo "DNX_VERSION: ${DNX_VERSION}"
+	echo "DNVM_BRANCH: ${DNVM_BRANCH}"
+else
+	DNU_FLAGS="--quiet"
+fi
+
+if [ -n "$UNSTABLE_TOOLCHAIN" ]; then
+	DNVM_FLAGS="-u"
+else
+	DNVM_FLAGS=""
+fi
+echo "DNVM FLAGS: ${DNVM_FLAGS}"
+
+# Install DNVM
+touch ~/.profile
+curl -sSL https://raw.githubusercontent.com/aspnet/Home/${DNVM_BRANCH}/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
+dnvm
+
 APT_CACHE_DIR="$CACHE_DIR/apt/cache"
 APT_STATE_DIR="$CACHE_DIR/apt/state"
 
@@ -83,30 +107,6 @@ export PKG_CONFIG_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/pkgconfig:$BUIL
 #give environment to later buildpacks
 export | grep -E -e ' (PATH|LD_LIBRARY_PATH|LIBRARY_PATH|INCLUDE_PATH|CPATH|CPPPATH|PKG_CONFIG_PATH)='  > "$LP_DIR/export"
 
-: ${LIBUV_VERSION:="1.8.0"}
-: ${DNVM_BRANCH:="dev"}
-: ${DNX_VERSION:="latest"}
-
-if [ -n "$BUILD_DEBUG" ]; then
-	DNU_FLAGS=""
-	echo "DNX_VERSION: ${DNX_VERSION}"
-	echo "DNVM_BRANCH: ${DNVM_BRANCH}"
-else
-	DNU_FLAGS="--quiet"
-fi
-
-if [ -n "$UNSTABLE_TOOLCHAIN" ]; then
-	DNVM_FLAGS="-u"
-else
-	DNVM_FLAGS=""
-fi
-echo "DNVM FLAGS: ${DNVM_FLAGS}"
-
-# Install DNVM
-touch ~/.profile
-curl -sSL https://raw.githubusercontent.com/aspnet/Home/${DNVM_BRANCH}/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
-dnvm
-
 export DNVM_RUNTIME_LOCAL_CACHE="/app/.dnx"
 export DNVM_RUNTIME_CACHE_LOCATION="${CACHE_DIR}/dnx/runtimes"
 mkdir -p ${DNVM_RUNTIME_LOCAL_CACHE}
@@ -123,7 +123,8 @@ echo "dnvm installed."
 
 #Upgrade dnvm
 echo "DNVM to install DNX for .NET Core"
-dnvm upgrade -runtime coreclr -arch x64 -p
+dnvm upgrade -runtime coreclr
+dnvm use -runtime coreclr -arch x64 1.0.0-rc1-update2
 echo "dnvm upgraded."
 
 echo "dnx --version"
