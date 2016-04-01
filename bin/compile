@@ -91,7 +91,7 @@ for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
   dpkg -x $DEB $BUILD_DIR/.apt/
 done
 
-cp -f $BUILD_DIR/.apt/* /app/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-rc1-update2/bin/
+cp -f $BUILD_DIR/.apt/lib/* /app/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-rc1-update2/bin/
 
 topic "Writing profile script"
 mkdir -p $BUILD_DIR/.profile.d
