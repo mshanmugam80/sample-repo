@@ -116,6 +116,7 @@ mkdir -p ${DNVM_RUNTIME_CACHE_LOCATION}
 echo "ln -s ${DNVM_RUNTIME_CACHE_LOCATION} ${DNVM_RUNTIME_LOCAL_CACHE}/runtimes"
 ln -s ${DNVM_RUNTIME_CACHE_LOCATION} ${DNVM_RUNTIME_LOCAL_CACHE}/runtimes
 
+
 #echo "dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default"
 #dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default
 #echo "dnvm installed."
@@ -131,7 +132,7 @@ dnvm use -runtime coreclr -arch x64 1.0.0-rc1-update2
 dnvm list
 echo "dnvm upgraded."
 
-echo "dnu --version"
-dnu --version
-echo "dnu version shown"
+echo "dnx --version"
+/app/.dnx/runtimes/dnx --version
+echo "dnx version shown"
 
