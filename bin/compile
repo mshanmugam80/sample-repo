@@ -118,3 +118,11 @@ dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default
 echo "dnvm installed."
 
 dnvm list
+
+#Upgrade dnvm
+echo "DNVM to install DNX for .NET Core"
+dnvm upgrade -runtime coreclr
+echo "dnvm upgraded."
+
+dnx --version
+
