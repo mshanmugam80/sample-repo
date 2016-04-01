@@ -117,15 +117,13 @@ echo "dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default"
 dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default
 echo "dnvm installed."
 
-dnvm list
-
 #Update apt-get
-ls /app/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-rc1-update2/bin
-apt-get -y install libunwind8 gettext libssl-dev libcurl3-dev zlib1g
+#ls /app/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-rc1-update2/bin
+#apt-get -y install libunwind8 gettext libssl-dev libcurl3-dev zlib1g
 
 #Upgrade dnvm
 echo "DNVM to install DNX for .NET Core"
-dnvm upgrade -runtime coreclr
+dnvm upgrade -runtime coreclr -arch x64 -p
 echo "dnvm upgraded."
 
 echo "dnx --version"
