@@ -120,7 +120,7 @@ echo "dnvm installed."
 dnvm list
 
 #Update apt-get
-cat $BUILD_DIR/.profile.d/000_apt.sh
+ls $BUILD_DIR/.apt/
 apt-get -y install libunwind8 gettext libssl-dev libcurl3-dev zlib1g -path=${PKG_CONFIG_PATH}
 
 #Upgrade dnvm
