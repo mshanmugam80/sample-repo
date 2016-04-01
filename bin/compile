@@ -120,7 +120,7 @@ echo "dnvm installed."
 dnvm list
 
 #Update apt-get
-find / -name libunwind8
+ls /app/.dnx/runtimes/dnx-coreclr-linux-x64.1.0.0-rc1-update2/bin
 apt-get -y install libunwind8 gettext libssl-dev libcurl3-dev zlib1g
 
 #Upgrade dnvm
