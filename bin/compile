@@ -120,7 +120,7 @@ mkdir -p ${DNVM_RUNTIME_CACHE_LOCATION}
 ln -s ${DNVM_RUNTIME_CACHE_LOCATION} ${DNVM_RUNTIME_LOCAL_CACHE}/runtimes
 
 #echo "dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default"
-#dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default
+dnvm install $DNX_VERSION $DNVM_FLAGS -runtime coreclr -alias default
 #echo "dnvm installed."
 
 #Update apt-get
@@ -130,11 +130,9 @@ ln -s ${DNVM_RUNTIME_CACHE_LOCATION} ${DNVM_RUNTIME_LOCAL_CACHE}/runtimes
 #Upgrade dnvm
 echo "DNVM to install DNX for .NET Core"
 dnvm upgrade -runtime coreclr
-dnvm use -runtime coreclr -arch x64 1.0.0-rc1-update2
-dnvm list
 echo "dnvm upgraded."
 
-echo "dnu --version"
-dnu --version
-echo "dnu version shown"
+echo "dnu restore"
+dnu restore
+echo "All dependecies are restored by DNU"
 
