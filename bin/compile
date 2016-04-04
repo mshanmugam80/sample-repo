@@ -63,7 +63,7 @@ apt-get $APT_OPTIONS update | indent
 # Install DNVM
 touch ~/.profile
 curl -sSL https://raw.githubusercontent.com/aspnet/Home/${DNVM_BRANCH}/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
-dnvm list
+dnvm
 
 apt-get download libunwind8
 topic "Installing libunwind8"
