@@ -81,7 +81,13 @@ mkdir -p $BUILD_DIR/.apt
 
 for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
   topic "Installing $(basename $DEB)"
-  dpkg -i $DEB --force-not-root --root=$HOME
+  apt-get source $DEB
+  cd $DEB
+  ./configure --prefix=$HOME
+  make
+  make install
+
+  #dpkg -i $DEB --force-not-root --root=$HOME
   #dpkg -x $DEB $BUILD_DIR/.apt/
 done
 
