@@ -142,7 +142,7 @@ sh autogen.sh
 make
 make install
 rm -rf $BUILD_DIR/.apt/libuv-1.8.0 && cd ~/
-ldconfig
+#ldconfig
 
 # Add DNX to the build output
 DNX_BUILD_LOCATION=${BUILD_DIR}/.dnx/runtimes/
