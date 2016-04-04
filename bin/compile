@@ -10,6 +10,7 @@ set -e
 # parse and derive params
 BUILD_DIR=$1
 CACHE_DIR=$2
+ENV_DIR=$3
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 echo "Build directory: $BUILD_DIR"
 
@@ -60,16 +61,7 @@ APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state
 #topic "Updating apt caches"
 #apt-get $APT_OPTIONS update | indent
 
-# Install DNVM
-SRC_DIR=`mktemp -d`
-# Move the app source code into temporary src dir using subshell to not leak shopt
-(
-	shopt -s dotglob
-	mv ${BUILD_DIR}/* ${SRC_DIR}
-)
-
 mkdir -p ${CACHE_DIR}
-
 export PATH="/app/aspnet/bin:${PATH}"
 export LD_LIBRARY_PATH="/app/aspnet/lib:${LD_LIBRARY_PATH}"
 
@@ -147,9 +139,9 @@ DNX_BUILD_LOCATION=${BUILD_DIR}/.dnx/runtimes/
 mkdir -p ${DNX_BUILD_LOCATION}
 cp -r ~/.dnx/runtimes/`dnvm alias default` ${DNX_BUILD_LOCATION}
 
-DEPLOYMENT_FILE_LOCATION=${SRC_DIR}/.deployment
+DEPLOYMENT_FILE_LOCATION=${BUILD_DIR}/.deployment
 if [ -n "project.json" ]; then
-   PROJECT_JSON_FILES=$(find ${SRC_DIR}/. -maxdepth 3 -iname "project.json")
+   PROJECT_JSON_FILES=$(find ${BUILD_DIR}/. -maxdepth 3 -iname "project.json")
    printf 'Found %s project.json files\n' $(echo "$PROJECT_JSON_FILES" | wc -l | tr -d ' ')
    PROJECT_JSON_FILE=$(echo "$PROJECT_JSON_FILES" | head -1)
 fi
