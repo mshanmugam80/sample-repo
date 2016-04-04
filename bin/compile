@@ -70,7 +70,7 @@ touch ~/.profile
 curl -sSL https://raw.githubusercontent.com/aspnet/Home/${DNVM_BRANCH}/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
 dnvm
 
-for PACKAGE in $(cat $SRC_DIR/Aptfile); do
+for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
   if [[ $PACKAGE == *deb ]]; then
     PACKAGE_NAME=$(basename $PACKAGE .deb)
     PACKAGE_FILE=$APT_CACHE_DIR/archives/$PACKAGE_NAME.deb
