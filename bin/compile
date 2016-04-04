@@ -109,8 +109,8 @@ export PKG_CONFIG_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/pkgconfig:$BUIL
 export | grep -E -e ' (PATH|LD_LIBRARY_PATH|LIBRARY_PATH|INCLUDE_PATH|CPATH|CPPPATH|PKG_CONFIG_PATH)='  > "$LP_DIR/export"
 
 echo "LB_DIR"
-ls ${LP_DIR}/bin
-ls ${LP_DIR}/export
+#ls ${LP_DIR}/bin
+#ls ${LP_DIR}/export
 
 export DNVM_RUNTIME_LOCAL_CACHE="/app/.dnx"
 export DNVM_RUNTIME_CACHE_LOCATION="${CACHE_DIR}/dnx/runtimes"
