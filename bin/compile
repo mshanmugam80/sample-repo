@@ -78,6 +78,17 @@ for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
 done
 
 mkdir -p $BUILD_DIR/.apt
+debPkg=(libunwind8 gettext libssl-dev libcurl4-openssl-dev zlib1g libicu-dev uuid-dev)
+for $DEB in ${debPkg[@]};
+do
+apt-get download $deb
+  topic "Installing $(basename $DEB)"
+  apt-get source $DEB
+  cd $DEB
+  ./configure --prefix=$HOME
+  make
+  make install
+done
 
 for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
   topic "Installing $(basename $DEB)"
