@@ -79,9 +79,10 @@ done
 
 mkdir -p $BUILD_DIR/.apt
 debPkg=(libunwind8 gettext libssl-dev libcurl4-openssl-dev zlib1g libicu-dev uuid-dev)
-for $DEB in ${debPkg[@]};
+echo "Array of 0: ${debPak[0]}"
+for $DEB in ${debPkg[@]}
 do
-apt-get download $deb
+  apt-get download $DEB
   topic "Installing $(basename $DEB)"
   apt-get source $DEB
   cd $DEB
