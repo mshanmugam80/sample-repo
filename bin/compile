@@ -168,6 +168,7 @@ dnu restore $DNU_FLAGS ${PROJECT_JSON_FILE}
 #find ${BUILD_DIR} -iname dnxcore50 -print0 | xargs -r -0 rm --
 
 echo "App is to be started"
+ls ${DNX_BUILD_LOCATION}
 dnx --version
 dnx me
 
