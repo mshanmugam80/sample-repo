@@ -61,9 +61,28 @@ topic "Updating apt caches"
 apt-get $APT_OPTIONS update | indent
 
 # Install DNVM
+SRC_DIR=`mktemp -d`
+# Move the app source code into temporary src dir using subshell to not leak shopt
+(
+	shopt -s dotglob
+	mv ${BUILD_DIR}/* ${SRC_DIR}
+)
+
+mkdir -p ${CACHE_DIR}
+
+export PATH="/app/aspnet/bin:${PATH}"
+export LD_LIBRARY_PATH="/app/aspnet/lib:${LD_LIBRARY_PATH}"
+
+# Install DNX
 touch ~/.profile
 curl -sSL https://raw.githubusercontent.com/aspnet/Home/${DNVM_BRANCH}/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
 dnvm
+
+export DNVM_RUNTIME_LOCAL_CACHE="/app/.dnx"
+export DNVM_RUNTIME_CACHE_LOCATION="${CACHE_DIR}/dnx/runtimes"
+mkdir -p ${DNVM_RUNTIME_LOCAL_CACHE}
+mkdir -p ${DNVM_RUNTIME_CACHE_LOCATION}
+ln -s ${DNVM_RUNTIME_CACHE_LOCATION} ${DNVM_RUNTIME_LOCAL_CACHE}/runtimes
 
 for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
   if [[ $PACKAGE == *deb ]]; then
