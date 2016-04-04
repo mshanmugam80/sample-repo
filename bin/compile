@@ -169,7 +169,7 @@ dnu restore $DNU_FLAGS ${PROJECT_JSON_FILE}
 
 echo "App is to be started"
 ls ${SRC_DIR}
-dnx run
+dnx run ${SRC_DIR}
 
 #dnu publish --out ${BUILD_DIR} $DNU_FLAGS --no-source --configuration Release ${PROJECT_JSON_FILE}
 
