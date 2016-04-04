@@ -134,7 +134,7 @@ echo "DNVM to install DNX for .NET Core"
 dnvm upgrade -runtime coreclr
 echo "dnvm upgraded."
 
-apt-get install make automake libtool curl
+#apt-get install make automake libtool curl
 curl -sSL https://github.com/libuv/libuv/archive/v1.8.0.tar.gz | tar zxfv - -C $BUILD_DIR/.apt/
 cd $BUILD_DIR/.apt/libuv-1.8.0
 sh autogen.sh
