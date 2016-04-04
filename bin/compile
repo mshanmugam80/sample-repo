@@ -168,7 +168,7 @@ dnu restore $DNU_FLAGS ${PROJECT_JSON_FILE}
 find ${BUILD_DIR} -iname dnxcore50 -print0 | xargs -r -0 rm --
 
 mkdir -p ${BUILD_DIR}/.profile.d
-cp -n ${LD_DIR}/.profile.d/* ${BUILD_DIR}/.profile.d/
+cp -n ${LP_DIR}/.profile.d/* ${BUILD_DIR}/.profile.d/
 
 echo "App is to be started"
 dnx run
