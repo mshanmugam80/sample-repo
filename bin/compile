@@ -63,6 +63,14 @@ apt-get $APT_OPTIONS update | indent
 touch ~/.profile
 curl -sSL https://raw.githubusercontent.com/aspnet/Home/${DNVM_BRANCH}/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
 
+apt-get download libunwind8
+topic "Installing libunwind8"
+  apt-get source libunwind8
+  cd libunwind8
+  ./configure --prefix=$HOME
+  make
+  make install
+  
 debPkg=(libunwind8 gettext libssl-dev libcurl4-openssl-dev zlib1g libicu-dev uuid-dev)
 echo "Array : ${debPak[@]}"
 
