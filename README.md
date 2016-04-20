@@ -1,2 +1,2 @@
-# dotnet-buildpack
-Dotnet app buildpack
+# sample-buildpack
+app buildpack
