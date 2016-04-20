@@ -27,7 +27,21 @@ function indent() {
   esac
 }
 
+function export_env_dir() {
+  local env_dir=$1
+  local whitelist_regex=${2:-'(DNX_VERSION|LIBUV_VERSION|NODE_VERSION|PROJECT|BUILD_DEBUG|DNVM_BRANCH)$'}
+  local blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
+  if [ -d "$env_dir" ]; then
+    for e in $(ls $env_dir); do
+      echo "$e" | grep -E "$whitelist_regex" | grep -qvE "$blacklist_regex" &&
+      export "$e=$(cat $env_dir/$e)"
+      :
+    done
+  fi
+}
+
 LD_DIR=`cd $(dirname $0); cd ..; pwd`
+export_env_dir ${ENV_DIR}
 
 # Create Cache Directory
 mkdir -p ${CACHE_DIR}
@@ -112,12 +126,9 @@ for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
   fi
 done
 
-#mkdir -p ${SRC_DIR}/.apt
 mkdir -p ${BUILD_DIR}/.apt
-
 for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
   print "Installing $(basename $DEB)"
-  #dpkg -x $DEB ${SRC_DIR}/.apt/
   dpkg -x $DEB ${BUILD_DIR}/.apt/
 done
 
@@ -132,25 +143,6 @@ make
 make install
 cd ${SRC_DIR}
 print "libuv installed."
-
-#mkdir -p ${SRC_DIR}/.profile.d
-#cat <<EOF >${SRC_DIR}/.profile.d/000_apt.sh
-#export PATH="\$HOME/.apt/usr/bin:\$PATH"
-#export LD_LIBRARY_PATH="\$HOME/.apt/usr/lib/x86_64-linux-gnu:\$HOME/.apt/usr/lib/i386-linux-gnu:\$HOME/.apt/usr/lib:$HOME/libuvinstall/lib:\$LD_LIBRARY_PATH"
-#export LIBRARY_PATH="\$HOME/.apt/usr/lib/x86_64-linux-gnu:\$HOME/.apt/usr/lib/i386-linux-gnu:\$HOME/.apt/usr/lib:\$LIBRARY_PATH"
-#export INCLUDE_PATH="\$HOME/.apt/usr/include:\$INCLUDE_PATH"
-#export CPATH="\$INCLUDE_PATH"
-#export CPPPATH="\$INCLUDE_PATH"
-#export PKG_CONFIG_PATH="\$HOME/.apt/usr/lib/x86_64-linux-gnu/pkgconfig:\$HOME/.apt/usr/lib/i386-linux-gnu/pkgconfig:\$HOME/.apt/usr/lib/pkgconfig:\$PKG_CONFIG_PATH"
-#EOF
-
-#export PATH="${SRC_DIR}/.apt/usr/bin:$PATH"
-#export LD_LIBRARY_PATH="${SRC_DIR}/.apt/usr/lib/x86_64-linux-gnu:${SRC_DIR}/.apt/usr/lib/i386-linux-gnu:${SRC_DIR}/.apt/usr/lib:${SRC_DIR}/libuvinstall/lib:$LD_LIBRARY_PATH"
-#export LIBRARY_PATH="${SRC_DIR}/.apt/usr/lib/x86_64-linux-gnu:${SRC_DIR}/.apt/usr/lib/i386-linux-gnu:${SRC_DIR}/.apt/usr/lib:$LIBRARY_PATH"
-#export INCLUDE_PATH="${SRC_DIR}/.apt/usr/include:$INCLUDE_PATH"
-#export CPATH="$INCLUDE_PATH"
-#export CPPPATH="$INCLUDE_PATH"
-#export PKG_CONFIG_PATH="${SRC_DIR}/.apt/usr/lib/x86_64-linux-gnu/pkgconfig:${SRC_DIR}/.apt/usr/lib/i386-linux-gnu/pkgconfig:${SRC_DIR}/.apt/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 mkdir -p ${BUILD_DIR}/.profile.d
 cat <<EOF >${BUILD_DIR}/.profile.d/000_apt.sh
@@ -179,7 +171,7 @@ touch ${HOME}/.profile
 curl -sSL https://raw.githubusercontent.com/aspnet/Home/${DNVM_BRANCH}/dnvminstall.sh | DNX_BRANCH=dev sh && source ${HOME}/.dnx/dnvm/dnvm.sh
 dnvm
 
-cat ${HOME}/.profile > ${BUILD_DIR}/.profile
+#cat ${HOME}/.profile > ${BUILD_DIR}/.profile
 cat <<EOF > ${BUILD_DIR}/dnvmsetup
 #!/usr/bin/env bash
 source /app/.dnx/dnvm/dnvm.sh
@@ -207,15 +199,10 @@ export PATH="$DNVM_RUNTIME_TARGET_CACHE:$PATH"
 #dnvm upgrade -runtime coreclr
 #print "dnvm upgraded."
 
-#DNX setting
+# DNX setting
 DNX_VERSION=$(dnvm alias default)
-DNX_RUNTIME_LINK=`which dnx`
-#export DNX_BUILD_LOCATION=${COMPILE_PATH}/.dnx/
-#mkdir -p ${DNX_BUILD_LOCATION}
-#DNX_VERSION=$(dnvm alias default)
-#cp -r ${HOME}/.dnx/* ${DNX_BUILD_LOCATION}
 #DNX_RUNTIME_LINK=`which dnx`
-#export PATH="$DNX_RUNTIME_LINK:$DNX_BUILD_LOCATION:$PATH"
+#export PATH="$DNX_RUNTIME_LINK:$PATH"
 
 # app start up script
 cat <<EOF > ${BUILD_DIR}/appstartup
@@ -228,16 +215,10 @@ chmod 777 ${BUILD_DIR}/appstartup
 print "Procfile setting:-"
 echo "web: ./appstartup" > ${BUILD_DIR}/Procfile
 
-#cp -f ${PROJECT_JSON_FILE} ${TARGET_PATH}/
-#cp -f ${BUILD_DIR}/bootstrap ${TARGET_PATH}/
-#cp -f ${BUILD_DIR}/Procfile ${TARGET_PATH}/
-#cp -f ${BUILD_DIR}/dnvmsetup ${TARGET_PATH}/
-#chmod 777 ${TARGET_PATH}/appstartup
-#chmod 777 ${TARGET_PATH}/dnvmsetup
-
 # DNU restore using project.json
-print "dnu restore $DNU_FLAGS ${PROJECT_JSON_FILE}"
+print "dnu restore starts"
 dnu restore ${DNU_FLAGS} ${PROJECT_JSON_FILE} --no-cache
+print "dnu restore ended."
 
 # DNU pulish using project.json
 print "dnu publish starts."
