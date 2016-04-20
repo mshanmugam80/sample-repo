@@ -171,16 +171,6 @@ touch ${HOME}/.profile
 curl -sSL https://raw.githubusercontent.com/aspnet/Home/${DNVM_BRANCH}/dnvminstall.sh | DNX_BRANCH=dev sh && source ${HOME}/.dnx/dnvm/dnvm.sh
 dnvm
 
-#cat ${HOME}/.profile > ${BUILD_DIR}/.profile
-cat <<EOF > ${BUILD_DIR}/dnvmsetup
-#!/usr/bin/env bash
-source /app/.dnx/dnvm/dnvm.sh
-dnvm
-EOF
-
-chmod 777 ${BUILD_DIR}/dnvmsetup
-print "dnvm installed."
-
 export DNVM_RUNTIME_LOCAL_CACHE="${HOME}/.dnx"
 export DNVM_RUNTIME_CACHE_LOCATION="${CACHE_DIR}/dnx/runtimes"
 mkdir -p ${DNVM_RUNTIME_LOCAL_CACHE}
@@ -207,7 +197,7 @@ DNX_VERSION=$(dnvm alias default)
 # app start up script
 cat <<EOF > ${BUILD_DIR}/appstartup
 #!/usr/bin/env bash
-$HOME/$APP_NAME/approot/web --server.urls http://+:\$PORT
+$HOME/approot/web --server.urls http://+:\$PORT
 EOF
 chmod 777 ${BUILD_DIR}/appstartup
 
