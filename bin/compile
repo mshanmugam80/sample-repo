@@ -222,10 +222,11 @@ cat <<EOF > ${BUILD_DIR}/appstartup
 #!/usr/bin/env bash
 $HOME/$APP_NAME/approot/web --server.urls http://+:\$PORT
 EOF
-
-print "Procfile setting:-"
-print "web: ./appstartup" > ${BUILD_DIR}/Procfile
 chmod 777 ${BUILD_DIR}/appstartup
+
+# Create procfile
+print "Procfile setting:-"
+"web: ./appstartup" > ${BUILD_DIR}/Procfile
 
 #cp -f ${PROJECT_JSON_FILE} ${TARGET_PATH}/
 #cp -f ${BUILD_DIR}/bootstrap ${TARGET_PATH}/
