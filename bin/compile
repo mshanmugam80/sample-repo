@@ -104,10 +104,10 @@ for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
     PACKAGE_NAME=$(basename $PACKAGE .deb)
     PACKAGE_FILE=$APT_CACHE_DIR/archives/$PACKAGE_NAME.deb
 
-    topic "Fetching $PACKAGE"
+    print "Fetching $PACKAGE"
     curl -s -L -z $PACKAGE_FILE -o $PACKAGE_FILE $PACKAGE 2>&1 | indent
   else
-    topic "Fetching .debs for $PACKAGE"
+    print "Fetching .debs for $PACKAGE"
     apt-get $APT_OPTIONS -y --force-yes -d install --reinstall $PACKAGE | indent
   fi
 done
@@ -116,7 +116,7 @@ done
 mkdir -p ${BUILD_DIR}/.apt
 
 for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
-  topic "Installing $(basename $DEB)"
+  print "Installing $(basename $DEB)"
   #dpkg -x $DEB ${SRC_DIR}/.apt/
   dpkg -x $DEB ${BUILD_DIR}/.apt/
 done
@@ -239,6 +239,6 @@ print "dnu restore $DNU_FLAGS ${PROJECT_JSON_FILE}"
 dnu restore ${DNU_FLAGS} ${PROJECT_JSON_FILE} --no-cache
 
 # DNU pulish using project.json
-topic "dnu publish starts."
+print "dnu publish starts."
 dnu publish --out ${TARGET_PATH} ${DNU_FLAGS} --configuration Release ${PROJECT_JSON_FILE} --no-source --runtime ${DNX_VERSION}
-topic "dnu publish ended."
+print "dnu publish ended."
