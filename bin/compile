@@ -11,9 +11,9 @@ fi
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
-LIBUV_VERSION:="1.8.0"
-DNVM_BRANCH:="dev"
-DNX_VERSION:="latest"
+: ${LIBUV_VERSION:="1.8.0"}
+: ${DNVM_BRANCH:="dev"}
+: ${DNX_VERSION:="latest"}
 
 function print() {
   echo "-----> $*"
