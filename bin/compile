@@ -182,7 +182,7 @@ dnvm
 cat ${HOME}/.profile > ${BUILD_DIR}/.profile
 cat <<EOF > ${BUILD_DIR}/dnvmsetup
 #!/usr/bin/env bash
-source .dnx/dnvm/dnvm.sh
+source /app/.dnx/dnvm/dnvm.sh
 dnvm
 EOF
 
@@ -226,7 +226,7 @@ chmod 777 ${BUILD_DIR}/appstartup
 
 # Create procfile
 print "Procfile setting:-"
-"web: ./appstartup" > ${BUILD_DIR}/Procfile
+echo "web: ./appstartup" > ${BUILD_DIR}/Procfile
 
 #cp -f ${PROJECT_JSON_FILE} ${TARGET_PATH}/
 #cp -f ${BUILD_DIR}/bootstrap ${TARGET_PATH}/
