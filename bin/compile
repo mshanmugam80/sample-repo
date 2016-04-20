@@ -142,6 +142,7 @@ sh autogen.sh
 make
 make install
 cd ${SRC_DIR}
+rm -rf ${BUILD_DIR}/libuv-${LIBUV_VERSION}
 print "libuv installed."
 
 mkdir -p ${BUILD_DIR}/.profile.d
