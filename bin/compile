@@ -118,7 +118,7 @@ then
 	# Install Node and grunt-cli
 	print "install node"
 	apt-get $APT_OPTIONS -y --force-yes -d install --reinstall nodejs-legacy | indent
-	ln -s ${SRC_DIR}/.apt/usr/bin/nodejs ${SRC_DIR}/.apt/usr/bin/node
+	ln -s ${HOME}/.apt/usr/bin/nodejs ${HOME}/.apt/usr/bin/node
 	apt-get $APT_OPTIONS -y --force-yes -d install --reinstall npm | indent
 	npm install bower gulp
 fi
