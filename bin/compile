@@ -118,10 +118,9 @@ if [[ -n $(find ${SRC_DIR}/. -type f -iname package.json -o -iname bower.json -o
 then
 	# Install Node and grunt-cli
 	print "install node"
-	NODE_PATH=`mktemp -d`
 	curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz -Ls \
-		| tar xz -C ${NODE_PATH}
-	export PATH="${NODE_PATH}/node-v${NODE_VERSION}-linux-x64/bin:${PATH}"
+		| tar xz -C ${SRC_DIR}
+	export PATH="${SRC_DIR}/node-v${NODE_VERSION}-linux-x64/bin:${PATH}"
 	apt-get $APT_OPTIONS -y --force-yes -d install --reinstall npm | indent
 	npm install bower gulp
 fi
