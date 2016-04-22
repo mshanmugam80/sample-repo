@@ -112,15 +112,12 @@ APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state
 print "Updating apt caches"
 apt-get $APT_OPTIONS update | indent
 
-: ${NODE_VERSION:="0.12.2"}
 print "install npm, bower"
 if [[ -n $(find ${SRC_DIR}/. -type f -iname package.json -o -iname bower.json -o -iname gulbfile.js) ]]
 then
 	# Install Node and grunt-cli
 	print "install node"
-	curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz -Ls \
-		| tar xz -C ${SRC_DIR}
-	export PATH="${SRC_DIR}/node-v${NODE_VERSION}-linux-x64/bin:${PATH}"
+	apt-get $APT_OPTIONS -y --force-yes -d install --reinstall nodejs-legacy | indent
 	apt-get $APT_OPTIONS -y --force-yes -d install --reinstall npm | indent
 	npm install bower gulp
 fi
