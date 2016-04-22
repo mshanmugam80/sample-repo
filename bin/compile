@@ -114,7 +114,7 @@ apt-get $APT_OPTIONS update | indent
 
 : ${NODE_VERSION:="0.12.2"}
 print "install npm, bower"
-if [[ -n $(find . -type f -iname package.json -o -iname bower.json -o -iname gulbfile.js) ]]
+if [[ -n $(find ${SRC_DIR}/. -type f -iname package.json -o -iname bower.json -o -iname gulbfile.js) ]]
 then
 	# Install Node and grunt-cli
 	print "install node"
