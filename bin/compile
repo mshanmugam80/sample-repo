@@ -63,7 +63,7 @@ printf 'Found %s project.json files\n' $(echo "$PROJECT_JSON_FILES" | wc -l | tr
 PROJECT_JSON_FILE=$(echo "$PROJECT_JSON_FILES" | head -1)
 
 # Get app name from project.json
-APPNAME=`grep -Po '(?<="name": ")[^"]*' $PROJECT_JSON_FILE`
+#APPNAME=`grep -Po '(?<="name": ")[^"]*' $PROJECT_JSON_FILE`
 
 # Create publish directory
 #TARGET_PATH="${BUILD_DIR}/${APP_NAME}"
@@ -131,6 +131,17 @@ for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
   print "Installing $(basename $DEB)"
   dpkg -x $DEB ${BUILD_DIR}/.apt/
 done
+
+: ${NODE_VERSION:="0.12.2"}
+if [[ -n $(find . -type f -iname package.json -o -iname bower.json -o -iname gulbfile.js) ]]
+then
+	# Install Node and grunt-cli
+	NODE_PATH=`mktemp -d`
+	curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz -Ls \
+		| tar xz -C ${NODE_PATH}
+	export PATH="${NODE_PATH}/node-v${NODE_VERSION}-linux-x64/bin:${PATH}"
+	apt-get $APT_OPTIONS -y --force-yes -d install --reinstall npm install bower gulp | indent
+fi
 
 # libuv configuration
 print "libuv install"
